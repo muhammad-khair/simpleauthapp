@@ -16,7 +16,7 @@ export function getPrivateAuthorised(...roles) {
     return (req, res) => {
         console.log('Calling authorised endpoint');
         res.json( {
-            message: 'Hello from a private endpoint! You need to be authenticated and have the relevant scopes to see this.',
+            message: `Hello from a private endpoint! You need to be authenticated and have the relevant scopes ${JSON.stringify(roles)} to see this.`,
             required_scopes: roles
         });
     }

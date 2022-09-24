@@ -21,13 +21,8 @@ const checkJwt = expressjwt({
     algorithms: ['RS256']
 });
 
-// unsure why it does not work?
-// const checkScopes = (...scopes) => jwtAuthz(scopes, {
-//     customScopeKey: 'permissions',
-//     checkAllScopes: true
-// });
-
-const checkScopes = (...scopes) => function(req, res, next) {
+const USE_NAIVE_CHECK = true;
+const naiveScopeCheck = (scopes) => function(req, res, next) {
     if (!req.headers || !req.headers.authorization || req.headers.authorization.indexOf(' ') < 0) {
         return res.status(403).json();
     }
@@ -43,6 +38,16 @@ const checkScopes = (...scopes) => function(req, res, next) {
         }
     }
     next();
+};
+
+const checkScopes = (...scopes) => {
+    return (USE_NAIVE_CHECK)
+        ? naiveScopeCheck(scopes)
+        : jwtAuthz(scopes, {
+            customScopeKey: "permissions",
+            checkAllScopes: true,
+            failWithError: true,
+        });
 };
 
 export { checkJwt, checkScopes };
