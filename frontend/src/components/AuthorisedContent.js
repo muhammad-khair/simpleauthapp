@@ -13,6 +13,19 @@ function AuthorisedContent() {
     useEffect(() => {
         if (!isAuthenticated) {
             setMessageContent('Not authenticated to view content');
+            axios.get(AUTHORISED_WELCOME_URL)
+            .then((res) => {
+                setMessageContent(res.data.message);
+            })
+            .catch((err) => {
+                if (err.response && err.response.status === 401) {
+                    setMessageContent('Not authenticated to view content');
+                } else if (err.response && err.response.status === 403) {
+                    setMessageContent('Not authorised to view content');
+                } else {
+                    setMessageContent('Unable to load content');
+                }
+            });
             return;
         }
         getAccessTokenSilently().then(
