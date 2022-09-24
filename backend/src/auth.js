@@ -20,6 +20,8 @@ const checkJwt = expressjwt({
     algorithms: ['RS256']
 });
 
-const checkScopes = (...scopes) => jwtAuthz(scopes);
+const checkScopes = (...scopes) => jwtAuthz(scopes, {
+    customScopeKey: "permissions"
+});
 
 export { checkJwt, checkScopes };
