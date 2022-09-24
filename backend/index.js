@@ -11,7 +11,12 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_SERVER,
+    methods: ["GET"],
+    allowedHeaders: ["Authorization", "Content-Type"],
+    maxAge: 86400,
+}));
 app.options('*', cors());
 
 app.get('/', (req, res) => {
@@ -19,7 +24,7 @@ app.get('/', (req, res) => {
 });
 app.use("/api", router);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 const httpServer = createServer(app);
 httpServer.listen(port);
 console.log(`App simpleauthapp listening on port ${port}`);
