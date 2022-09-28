@@ -22,7 +22,7 @@ function PublicContent() {
                     setMessageContent('Unable to load content');
                 }
             });
-    }, [setMessageContent]);
+    }, []);
 
     return (
         <div>

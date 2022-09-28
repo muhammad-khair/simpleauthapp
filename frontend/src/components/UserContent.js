@@ -6,11 +6,14 @@ import { useState, useEffect } from 'react';
 import { USER_WELCOME_URL } from '../tools/configs';
 
 function UserContent() {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
     const [messageContent, setMessageContent] = useState('Loading content');
 
     useEffect(() => {
+        if (isLoading) {
+            return;
+        }
         if (!isAuthenticated) {
             axios.get(USER_WELCOME_URL)
             .then((res) => {
@@ -42,7 +45,7 @@ function UserContent() {
                 });
             }
         );        
-    }, [isAuthenticated, getAccessTokenSilently, setMessageContent]);
+    }, [isLoading, isAuthenticated, getAccessTokenSilently]);
 
     return (
         <div>

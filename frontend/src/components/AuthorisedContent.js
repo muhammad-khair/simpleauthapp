@@ -6,11 +6,14 @@ import { useState, useEffect } from 'react';
 import { AUTHORISED_WELCOME_URL } from '../tools/configs';
 
 function AuthorisedContent() {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
     const [messageContent, setMessageContent] = useState('Loading content');
 
     useEffect(() => {
+        if (isLoading) {
+            return;
+        }
         if (!isAuthenticated) {
             setMessageContent('Not authenticated to view content');
             axios.get(AUTHORISED_WELCOME_URL)
@@ -47,7 +50,7 @@ function AuthorisedContent() {
                 });
             }
         );
-    }, [isAuthenticated, getAccessTokenSilently, setMessageContent]);
+    }, [isLoading, isAuthenticated, getAccessTokenSilently]);
 
     return (
         <div>

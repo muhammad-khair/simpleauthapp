@@ -27,13 +27,12 @@ const naiveScopeCheck = (scopes) => function(req, res, next) {
         return res.status(403).json();
     }
     const token = jwt_decode(req.headers.authorization.split(" ")[1]);
-    if (!token.permissions || !Array.isArray(token.permissions) || scopes.length !== token.permissions.length) {
+    if (!token.permissions || !Array.isArray(token.permissions)) {
         return res.status(403).json();
     }
-    let sortedPerms = token.permissions.sort();
-    let sortedScopes = scopes.sort();
-    for (var i = 0; i < sortedPerms.length; i++) {
-        if (sortedPerms[i] !== sortedScopes[i]) {
+    let userPermsAsSet = new Set(token.permissions);
+    for (var idx in scopes) {
+        if (!userPermsAsSet.has(scopes[idx])) {
             return res.status(403).json();
         }
     }
